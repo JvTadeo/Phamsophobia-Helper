@@ -1,0 +1,68 @@
+{
+  "name": "phasmo-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist-electron/main.js",
+  "homepage": "./",
+  "scripts": {
+    "dev": "vite",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && npm run start-electron\"",
+    "start-electron": "npm run compile-electron && electron .",
+    "build": "vue-tsc -b && vite build",
+    "dist": "npm run build && electron-builder --publish=never",
+    "preview": "vite preview",
+    "compile-electron": "tsc --project tsconfig.electron.json"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@vueuse/core": "^13.5.0",
+    "axios": "^1.10.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-vue-next": "^0.525.0",
+    "pinia": "^3.0.3",
+    "reka-ui": "^2.3.2",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.11",
+    "tw-animate-css": "^1.3.5",
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.15",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/tsconfig": "^0.7.0",
+    "concurrently": "^9.2.0",
+    "electron": "^37.2.3",
+    "electron-builder": "^26.0.12",
+    "ts-node": "^10.9.2",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4",
+    "vue-tsc": "^2.2.12",
+    "wait-on": "^8.0.3"
+  },
+  "build": {
+    "appId": "com.phasmo.app",
+    "productName": "Phasmo App",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/vite.svg"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/vite.svg"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/vite.svg"
+    }
+  }
+}
