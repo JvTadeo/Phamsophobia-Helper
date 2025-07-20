@@ -1,0 +1,33 @@
+/* Fonte Caveat - todas as variações usam o MESMO nome de família */
+@font-face {
+  font-family: 'Caveat';
+  src: url('./Caveat-Regular.ttf') format('truetype');
+  font-weight: 400; /* Normal/Regular */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('./Caveat-Bold.ttf') format('truetype');
+  font-weight: 700; /* Bold */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('./Caveat-Light.ttf') format('truetype');
+  font-weight: 300; /* Light */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  src: url('./Caveat-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic; /* Italic */
+  font-display: swap;
+}
+

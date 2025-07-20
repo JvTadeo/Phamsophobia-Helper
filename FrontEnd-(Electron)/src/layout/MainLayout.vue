@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full h-full flex flex-col mx-2">
-        <!-- NavBar -->
-        <NavBarCustom/>
+    <div class="flex flex-col px-2">
+        <!-- NavBar & Header -->
+        <HeaderCustom/>
         <!-- Body -->
         <div class="flex-1">
             <router-view/>
@@ -10,5 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import NavBarCustom from '@/components/navbar/NavBarCustom.vue';
+import HeaderCustom from '@/components/HeaderCustom.vue';
 </script>
+
+<style scoped>
+</style>
