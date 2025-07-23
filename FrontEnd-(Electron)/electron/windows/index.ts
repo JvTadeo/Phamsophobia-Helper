@@ -1,6 +1,5 @@
-// Exporta a classe base
+// Exports the base class
 export { BaseWindow } from '../core/BaseWindow.js';
 
-// Exporta as janelas específicas
+// Exports specific windows
 export { MainWindow } from './MainWindow.js';
-export { SettingsWindow } from './SettingsWindow.js';

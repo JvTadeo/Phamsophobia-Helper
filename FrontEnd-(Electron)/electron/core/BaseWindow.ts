@@ -1,12 +1,14 @@
 import { BrowserWindow, BrowserWindowConstructorOptions, app, ipcMain, IpcMainEvent } from 'electron';
 import * as path from 'path';
+import * as fs from 'fs';
 import { fileURLToPath } from 'url';
 
+// ES Module compatibility for __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * Classe base para criação de janelas do Electron com funcionalidades padrão
+ * Base class for creating Electron windows with standard functionalities
  */
 export abstract class BaseWindow {
   protected window: BrowserWindow;
@@ -15,14 +17,24 @@ export abstract class BaseWindow {
   constructor(options: BrowserWindowConstructorOptions = {}) {
     this.isDevelopment = !app.isPackaged;
     
-    // Configurações padrão que podem ser sobrescritas
+    // Determine correct preload path based on development vs production
+    const preloadPath = this.isDevelopment 
+      ? path.join(__dirname, '../preload.js')  // Development: dist-electron/preload.js
+      : path.join(__dirname, 'preload.js');    // Production: bundled with app
+    
+    // Verify if preload file exists
+    if (!fs.existsSync(preloadPath)) {
+      console.warn(`Preload script not found at: ${preloadPath}`);
+    }
+    
+    // Default settings that can be overridden
     const defaultOptions: BrowserWindowConstructorOptions = {
       show: false,
       autoHideMenuBar: true,
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
-        preload: path.join(__dirname, 'preload.js'),
+        preload: preloadPath,
         ...options.webPreferences
       },
       ...options
@@ -34,41 +46,47 @@ export abstract class BaseWindow {
   }
 
   /**
-   * Configura comportamentos padrão da janela
+   * Sets up default window behaviors
    */
   private setupDefaultBehavior(): void {
-    // Configura o F12 para abrir/fechar DevTools
+    // Sets up F12 to open/close DevTools
     this.window.webContents.on('before-input-event', (event, input) => {
-      if (input.key === 'F12' && input.type === 'keyDown') {
-        this.toggleDevTools();
-      }
+      if (input.key === 'F12' && input.type === 'keyDown') this.toggleDevTools();
     });
 
-    // Mostra a janela quando estiver pronta
+    // Shows the window when ready
     this.window.once('ready-to-show', () => {
       this.window.show();
       this.onWindowReady();
     });
 
-    // Evento quando a janela é fechada
+    // Event when the window is closed
     this.window.on('closed', () => {
       this.onWindowClosed();
     });
   }
 
   /**
-   * Configura os listeners de eventos IPC
+   * Sets up IPC event listeners
    */
   private setupEventListeners(): void {
-    // Remove listeners existentes para evitar duplicatas
+    // Removes existing listeners to avoid duplicates
     this.removeAllListeners();
     
-    // Configura listeners específicos da janela
+    // Sets up window-specific listeners
     this.registerIpcHandlers();
   }
 
   /**
-   * Alterna entre abrir e fechar o DevTools
+   * Removes all IPC listeners for this window
+   */
+  private removeAllListeners(): void {
+    // This method should be implemented by child classes
+    // to remove their specific listeners
+  }
+
+  /**
+   * Toggles DevTools open/close
    */
   public toggleDevTools(): void {
     if (this.window.webContents.isDevToolsOpened()) {
@@ -79,79 +97,60 @@ export abstract class BaseWindow {
   }
 
   /**
-   * Abre o DevTools
+   * Opens DevTools
    */
   public openDevTools(): void {
     this.window.webContents.openDevTools();
   }
 
   /**
-   * Fecha o DevTools
+   * Closes DevTools
    */
   public closeDevTools(): void {
     this.window.webContents.closeDevTools();
   }
 
   /**
-   * Carrega uma URL ou arquivo na janela
+   * Loads a URL or file in the window
    */
   public loadContent(url?: string, filePath?: string): void {
     if (this.isDevelopment && url) {
       this.window.loadURL(url);
     } else if (filePath) {
-      this.window.loadFile(filePath);
+      const fullPath = path.isAbsolute(filePath) 
+        ? filePath 
+        : path.join(__dirname, filePath);
+      this.window.loadFile(fullPath);
     } else {
-      // Fallback padrão
-      this.window.loadFile(path.join(__dirname, '../dist/index.html'));
+      // Default fallback
+      const defaultPath = path.join(__dirname, '../../dist/index.html');
+      this.window.loadFile(defaultPath);
     }
   }
 
   /**
-   * Envia evento para o renderer process
+   * Sends event to the renderer process
    */
   public sendToRenderer(channel: string, ...args: any[]): void {
     this.window.webContents.send(channel, ...args);
   }
 
   /**
-   * Registra um handler para eventos IPC específicos desta janela
-   */
-  protected registerIpcHandler(channel: string, handler: (event: IpcMainEvent, ...args: any[]) => void): void {
-    ipcMain.on(channel, (event, ...args) => {
-      // Verifica se o evento veio desta janela específica
-      if (event.sender === this.window.webContents) {
-        handler(event, ...args);
-      }
-    });
-  }
-
-  /**
-   * Remove um handler IPC específico
-   */
-  protected removeIpcHandler(channel: string, handler?: (...args: any[]) => void): void {
-    if (handler) {
-      ipcMain.removeListener(channel, handler);
-    } else {
-      ipcMain.removeAllListeners(channel);
-    }
-  }
-
-  /**
-   * Getter para acessar a instância da janela
+   * Getter to access the window instance
    */
   public getWindow(): BrowserWindow {
     return this.window;
   }
 
   /**
-   * Verifica se a janela está destruída
+   * Checks if the window is destroyed
    */
   public isDestroyed(): boolean {
     return this.window.isDestroyed();
   }
 
   /**
-   * Fecha a janela
+   * Closes the window
    */
   public close(): void {
     if (!this.window.isDestroyed()) {
@@ -160,32 +159,47 @@ export abstract class BaseWindow {
   }
 
   /**
-   * Método abstrato para registrar handlers IPC específicos da janela
-   * Deve ser implementado pelas classes filhas
+   * Abstract method to register window-specific IPC handlers
+   * Must be implemented by child classes
    */
   protected abstract registerIpcHandlers(): void;
 
   /**
-   * Método chamado quando a janela está pronta para ser exibida
-   * Pode ser sobrescrito pelas classes filhas
+   * Method called when the window is ready to be displayed
+   * Can be overridden by child classes
    */
   protected onWindowReady(): void {
-    // Implementação padrão vazia
+    // Empty default implementation
   }
 
   /**
-   * Método chamado quando a janela é fechada
-   * Pode ser sobrescrito pelas classes filhas
+   * Method called when the window is closed
+   * Can be overridden by child classes
    */
   protected onWindowClosed(): void {
     this.removeAllListeners();
   }
 
   /**
-   * Remove todos os listeners IPC desta janela
+   * Registers a handler for window-specific IPC events
    */
-  private removeAllListeners(): void {
-    // Este método deve ser implementado pelas classes filhas
-    // para remover seus listeners específicos
+  protected registerIpcHandler(channel: string, handler: (event: IpcMainEvent, ...args: any[]) => void): void {
+    ipcMain.on(channel, (event, ...args) => {
+      // Checks if the event came from this specific window
+      if (event.sender === this.window.webContents) {
+        handler(event, ...args);
+      }
+    });
+  }
+
+  /**
+   * Removes a specific IPC handler
+   */
+  protected removeIpcHandler(channel: string, handler?: (...args: any[]) => void): void {
+    if (handler) {
+      ipcMain.removeListener(channel, handler);
+    } else {
+      ipcMain.removeAllListeners(channel);
+    }
   }
 }

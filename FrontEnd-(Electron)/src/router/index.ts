@@ -13,6 +13,9 @@ const routes = [
         path: "/stopwatch",
         name: "stopwatch",
         component: StopwatchView,
+        meta: {
+            standalone: true
+        }
     },
 ];
 

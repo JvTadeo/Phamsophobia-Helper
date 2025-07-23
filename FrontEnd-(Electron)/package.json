@@ -12,7 +12,7 @@
     "build": "vue-tsc -b && vite build",
     "dist": "npm run build && electron-builder --publish=never",
     "preview": "vite preview",
-    "compile-electron": "tsc --project tsconfig.electron.json"
+    "compile-electron": "tsc --project tsconfig.electron.json && tsc --project tsconfig.preload.json"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.11",

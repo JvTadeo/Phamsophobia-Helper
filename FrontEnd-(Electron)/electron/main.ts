@@ -1,20 +1,36 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { MainWindow } from './windows/MainWindow.js';
+import { StopWatchWindow } from './windows/StopwatchWindow.js';
 
 let mainWindow: MainWindow | null = null;
+let stopwatchWindow: StopWatchWindow | null = null;
 
 /**
- * Cria a janela principal da aplicação
+ * Creates the main application window
  */
 function createWindow(): void {
   mainWindow = new MainWindow();
 }
 
-// Configuração dos eventos do Electron
+/**
+ * Creates the stopwatch window
+ */
+function createStopWatchWindow(): void {
+  if (!stopwatchWindow || stopwatchWindow.isDestroyed()) {
+    stopwatchWindow = new StopWatchWindow();
+  } else {
+    stopwatchWindow.getWindow().show();
+  }
+}
+
+// Electron event configuration
 app.whenReady().then(() => {
   createWindow();
-
-  // No macOS, recria a janela quando o ícone do dock é clicado
+  
+  // Setup global IPC handlers
+  setupIpcHandlers();
+  
+  // On macOS, recreate the window when the dock icon is clicked
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -22,11 +38,23 @@ app.whenReady().then(() => {
   });
 });
 
-// Quando todas as janelas forem fechadas
+/**
+ * Setup global IPC handlers
+ */
+function setupIpcHandlers(): void {
+  // Handler for showing stopwatch window
+  ipcMain.on('stopwatch:show', () => {
+    createStopWatchWindow();
+  });
+}
+
+// When all windows are closed
 app.on('window-all-closed', () => {
-  // No macOS, aplicações ficam ativas mesmo sem janelas
+  // On macOS, applications stay active even without windows
   if (process.platform !== 'darwin') {
     app.quit();
   }
+  
   mainWindow = null;
+  stopwatchWindow = null;
 });

@@ -1,17 +1,21 @@
-import { contextBridge, ipcRenderer } from 'electron';
+const { contextBridge, ipcRenderer } = require('electron');
 
-// Expõe APIs seguras para o front-end
+// Exposes safe APIs to the front-end
 contextBridge.exposeInMainWorld('electronAPI', {
-  // Exemplo de função para comunicação com o main process
+  // Example function for communication with the main process
   getVersion: () => process.versions.electron,
-  
-  // Exemplo de evento do renderer para o main
-  sendMessage: (message: string) => ipcRenderer.send('message-from-renderer', message),
-  
-  // Exemplo de listener para eventos do main
-  onMessage: (callback: (message: string) => void) => {
-    ipcRenderer.on('message-from-main', (_event, message) => callback(message));
+
+  stopwatch: {
+    show: () => ipcRenderer.send('stopwatch:show'),
+  },
+
+  // Global shortcuts listeners
+  onF1Pressed: (callback: () => void) => {
+    ipcRenderer.on('global-f1-pressed', callback);
+  },
+
+  // Remove listeners
+  removeF1Listener: () => {
+    ipcRenderer.removeAllListeners('global-f1-pressed');
   }
 });
-
-console.log('Preload script carregado!');

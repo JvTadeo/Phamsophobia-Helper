@@ -1,5 +1,6 @@
 <template>
-  <MainLayout/>
+  <router-view v-if="$route.meta.standalone" />
+  <MainLayout v-else />
 </template>
 
 <script setup lang="ts">
