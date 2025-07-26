@@ -6,3 +6,8 @@ export interface ISideBarItem {
     icon: Component;
     action? : () => void
 }
+
+export interface ITimeDividers {
+    position: number;
+    label: string;
+}

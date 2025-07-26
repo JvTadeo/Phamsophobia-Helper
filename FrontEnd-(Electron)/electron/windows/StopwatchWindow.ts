@@ -25,6 +25,10 @@ export class StopWatchWindow extends BaseWindow {
         });
     }
 
+    protected override onWindowReady(): void {
+        this.getWindow().setAlwaysOnTop(true, 'screen-saver');
+    }
+
     private registerGlobalShortcuts(): void {
         // Registra F1 como atalho global
         const registered = globalShortcut.register('F1', () => {

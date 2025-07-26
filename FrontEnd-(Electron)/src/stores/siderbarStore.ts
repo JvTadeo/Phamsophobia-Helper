@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { ISideBarItem } from "@/interface/ISideBarItem";
+import type { ISideBarItem } from "@/interface/StopwatchStore.interface";
 import { Timer } from "lucide-vue-next";
 
 export const useSidebarStore = defineStore("sidebar", {
