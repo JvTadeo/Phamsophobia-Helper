@@ -31,13 +31,13 @@ export class SteamApiService {
   }
 
   async getPhasmophobiaNews(limit: number = 5): Promise<SteamNewsItem[]> {
-    Logger.info('Fetching Phasmophobia news from Steam', { limit });
+    Logger.info('Fetching Phasmophobia news from Steam');
 
     const response = await this.steamApi.get<SteamNewsResponse>('/ISteamNews/GetNewsForApp/v0002/', {
       params: {
         appid: this.PHASMO_APP_ID,
         count: limit,
-        maxlength: 300,
+        maxlength: 100,
         format: 'json'
       }
     }).catch(error => {
@@ -46,7 +46,7 @@ export class SteamApiService {
     });
 
     const newsItems = response.data.appnews.newsitems;
-    Logger.success('Successfully fetched Steam news', { count: newsItems.length });
+    Logger.success('Successfully fetched Steam news');
 
     return newsItems;
   }

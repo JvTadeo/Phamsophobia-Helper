@@ -12,8 +12,6 @@ export interface RequestLog {
 }
 
 export const requestLogger = (req: Request, res: Response, next: NextFunction): void => {
-  const startTime = Date.now();
-  
   // Log da requisição
   Logger.request(req.method, req.originalUrl);
   
@@ -21,19 +19,9 @@ export const requestLogger = (req: Request, res: Response, next: NextFunction): 
   const originalSend = res.send;
   
   res.send = function(data) {
-    const duration = Date.now() - startTime;
     const status = res.statusCode;
     
-    // Log da resposta com status e duração
     Logger.request(req.method, req.originalUrl, status);
-    Logger.debug(`Request completed in ${duration}ms`, {
-      method: req.method,
-      url: req.originalUrl,
-      status,
-      duration: `${duration}ms`,
-      ip: req.ip,
-      userAgent: req.get('User-Agent')
-    });
     
     return originalSend.call(this, data);
   };

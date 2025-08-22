@@ -15,18 +15,9 @@ export class NewsController {
     const limitParam = req.query.limit;
     const limit = limitParam ? Number(limitParam) : 5;
 
-    Logger.debug('News request received', {
-      limit,
-      ip: req.ip,
-      userAgent: req.get('User-Agent')
-    });
-
-    // ✨ Se der erro aqui, é automaticamente capturado!
     const news = await this.getPhasmophobiaNewsUseCase.execute(limit);
 
-    Logger.success('News request completed successfully', {
-      newsCount: news.length
-    });
+    Logger.success('News request completed successfully');
 
     res.json({
       status: 'SUCCESS',

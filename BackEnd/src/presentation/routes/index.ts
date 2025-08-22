@@ -11,9 +11,9 @@ const newsController = new NewsController();
 const router = Router();
 
 // Health check route
-router.get('/health', (req, res) => healthController.getHealth(req, res));
+router.get('/health', (req, res) => healthController.getHealth);
 
-// Phasmophobia news route - agora sem next!
+// Phasmophobia news route
 router.get('/news', newsController.getNews);
 
 export { router as routes };

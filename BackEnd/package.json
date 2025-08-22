@@ -4,7 +4,7 @@
   "description": "Backend simples para Phasmophobia Helper com Clean Architecture",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "tsup src/server.ts --watch --onSuccess \"node dist/server.js\"",
+    "start:dev": "tsup src/server.ts --watch --onSuccess \"node dist/server.js\"",
     "build": "tsup src/server.ts",
     "start": "node dist/server.js"
   },
