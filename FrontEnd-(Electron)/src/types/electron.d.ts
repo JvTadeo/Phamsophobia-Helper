@@ -7,6 +7,9 @@ export interface ElectronAPI {
   // Global shortcuts
   onF1Pressed: (callback: () => void) => void;
   removeF1Listener: () => void;
+  openDefaultBrowser: (url: string) => void;
+  close: () => void;
+  minimize: () => void;
 }
 
 // Extensão da interface Window

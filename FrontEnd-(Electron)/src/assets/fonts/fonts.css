@@ -1,7 +1,7 @@
-/* Fonte Caveat - todas as variações usam o MESMO nome de família */
+/* Caveat */
 @font-face {
   font-family: 'Caveat';
-  src: url('./Caveat-Regular.ttf') format('truetype');
+  src: url('./Caveat/Caveat-Regular.ttf') format('truetype');
   font-weight: 400; /* Normal/Regular */
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'Caveat';
-  src: url('./Caveat-Bold.ttf') format('truetype');
+  src: url('./Caveat/Caveat-Bold.ttf') format('truetype');
   font-weight: 700; /* Bold */
   font-style: normal;
   font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: 'Caveat';
-  src: url('./Caveat-Light.ttf') format('truetype');
+  src: url('./Caveat/Caveat-Light.ttf') format('truetype');
   font-weight: 300; /* Light */
   font-style: normal;
   font-display: swap;
@@ -25,9 +25,17 @@
 
 @font-face {
   font-family: 'Caveat';
-  src: url('./Caveat-Italic.ttf') format('truetype');
+  src: url('./Caveat/Caveat-Italic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic; /* Italic */
   font-display: swap;
 }
 
+/* Test */
+@font-face {
+  font-family: 'VT323';
+  src: url('./Test/VT323-Regular.ttf') format('truetype');
+  font-weight: 400; /* Normal/Regular */
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,5 +1,5 @@
 import { BaseWindow } from '../core/BaseWindow.js';
-import { BrowserWindowConstructorOptions } from 'electron';
+import { BrowserWindowConstructorOptions, ipcMain } from 'electron';
 
 /**
  * Main application window
@@ -7,9 +7,11 @@ import { BrowserWindowConstructorOptions } from 'electron';
 export class MainWindow extends BaseWindow {
   constructor() {
     const options: BrowserWindowConstructorOptions = {
-      width: 400,
-      height: 600,
+      width: 500,
+      height: 700,
       resizable: false,
+      maximizable: false,
+      frame: false,
       title: 'Phasmophobia Helper'
     };
 
@@ -23,6 +25,8 @@ export class MainWindow extends BaseWindow {
    * Registers main window specific IPC handlers
    */
   protected registerIpcHandlers(): void {
+    ipcMain.on('minimize', () => this.onMinizeCalled());
+    ipcMain.on('close', () => this.close());
   }
 
   /**
@@ -37,4 +41,10 @@ export class MainWindow extends BaseWindow {
   protected onWindowClosed(): void {
     super.onWindowClosed();
   }
+
+  // ------------------------------
+  private onMinizeCalled(): void {
+    this.getWindow().minimize();
+  }
+
 }

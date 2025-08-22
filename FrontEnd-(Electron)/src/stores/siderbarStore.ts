@@ -8,11 +8,7 @@ export const useSidebarStore = defineStore("sidebar", {
             {
                 name: "Stopwatch",
                 icon: Timer,
-                action: () => {
-                    if (window.electronAPI?.stopwatch?.show) {
-                        window.electronAPI.stopwatch.show();
-                    }
-                }
+                action: () => { window.electronAPI.stopwatch.show()}
             },
         ] as ISideBarItem[],
     }),

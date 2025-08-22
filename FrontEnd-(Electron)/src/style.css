@@ -86,6 +86,7 @@
   --sidebar-ring: oklch(0.439 0 0);
 }
 
+/* Custom */
 .custom-button-padding {
   padding: 8px !important;
 }
@@ -95,12 +96,36 @@
   height: 100% !important;
 }
 
+.no-drag {
+  -webkit-app-region: no-drag  
+}
+
+.drag {
+  -webkit-app-region: drag
+}
+
+/* Scroll */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6d6d6;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
 /* Tailwind */
 @theme {
   --font-caveat: Caveat;
   --font-caveat-bold: Caveat-Bold;
   --font-caveat-light: Caveat-Light;
   --font-caveat-italic: Caveat-Italic;
+  --font-test: VT323;
 }
 
 @theme inline {
@@ -142,11 +167,10 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    font-family: 'Caveat'
+    font-family: 'VT323'
   }
   body {
     @apply bg-background text-foreground;

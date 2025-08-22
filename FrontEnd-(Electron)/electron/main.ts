@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { MainWindow } from './windows/MainWindow.js';
 import { StopWatchWindow } from './windows/StopwatchWindow.js';
 
@@ -41,10 +41,16 @@ app.whenReady().then(() => {
 /**
  * Setup global IPC handlers
  */
-function setupIpcHandlers(): void {
+function setupIpcHandlers(): void {  
   // Handler for showing stopwatch window
   ipcMain.on('stopwatch:show', () => {
     createStopWatchWindow();
+  });
+
+  // Handler for Open Default Browser
+  ipcMain.on('open-default-browser', (event, url: string) => {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 }
 

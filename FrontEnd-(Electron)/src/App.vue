@@ -9,8 +9,9 @@ import MainLayout from './layout/MainLayout.vue';
 
 <style>
 #app {
-  width: 100vw;
-  height: 100vh;
-  background-color: #121212;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: #1F1F1F;
+  box-sizing: border-box;
 }
 </style>
