@@ -1,40 +1,33 @@
-import express from 'express';
-import cors from 'cors';
+import express, { NextFunction, Request, Response, ErrorRequestHandler } from 'express';
 import dotenv from 'dotenv';
-import { routes } from '@/presentation/routes';
-import { Logger } from '@/shared/utils/Logger';
-import { requestLogger } from '@/shared/middleware/requestLogger';
-import { errorHandler, notFoundHandler } from '@/shared/middleware/errorHandler';
+import router from './routes';
+import cors from 'cors';
+import { CustomLogger } from './utils/customLogger';
+import { CustomError } from './utils/customError';
 
-// Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = Number(process.env.PORT) || 3001;
+const port = process.env.PORT;
 
-// Middlewares
-app.use(cors({
-  origin: true,  // Permite qualquer origem (ideal para Electron)
-}));
-
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Logging middleware
-app.use(requestLogger);
+app.use('/', router);
 
-// Routes
-app.use(routes);
+const errorHandler: ErrorRequestHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+	if (err instanceof CustomError) {
+		CustomLogger.error(err.message);
+		res.status(err.statusCode).send({message: err.message, details: err.details,});
+		return;
+	}
+	
+	CustomLogger.error(err.message);
+    res.status(500).send({ message: "Internal Server Error" });
+};
 
-// 404 handler (antes do error handler)
-app.use('*', notFoundHandler);
-
-// Error handler (sempre por último!)
 app.use(errorHandler);
 
-// Start server
-app.listen(PORT, () => {
-  Logger.success('Server started');
+app.listen(port, () => {
+	CustomLogger.info('Server started on port ' + port);
 });
-
-export default app;
