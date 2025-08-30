@@ -1,10 +1,9 @@
 import type { Component } from "vue";
 
-export interface ISideBarItem {
+export interface IToolBoxItem {
     name: string;
-    route?: string;
     icon: Component;
-    action? : () => void
+    action : () => void
 }
 
 export interface ITimeDividers {

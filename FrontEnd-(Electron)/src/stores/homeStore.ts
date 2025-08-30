@@ -12,7 +12,6 @@ export const useHomeStore = defineStore("home", {
                 .then((response) => {
                     this.newsData = response.data;
                 });
-            console.log(this.newsData);
         },
         openLink(link: string) {
             window.electronAPI.openDefaultBrowser(link);

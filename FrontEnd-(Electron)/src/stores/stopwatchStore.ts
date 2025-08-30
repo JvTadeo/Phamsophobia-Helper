@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { ITimeDividers } from "@/interface/StopwatchStore.interface";
+import type { ITimeDividers } from "@/interface/ToolBoxStore.interface";
 
 enum StopwatchState {
     STOPPED,

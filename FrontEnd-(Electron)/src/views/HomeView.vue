@@ -7,7 +7,7 @@
       @click="useHomeStore().openLink(i.url)"
     >
       <CardHeader>
-        <CardTitle class="text-xl">{{ i.title }}</CardTitle>
+        <CardTitle class="text-xl text-amber-50">{{ i.title }}</CardTitle>
         <CardDescription
           class="text-sm text-accent-foreground"
         >

@@ -29,13 +29,7 @@
 
 <script setup lang="ts">
 import HeaderCustom from '@/components/HeaderCustom.vue';
-import ToolBox from '@/components/ToolBox.vue';
+import ToolBox from '@/components/Navbar.vue';
 import { useHomeStore } from '@/stores/homeStore';
 import { Separator } from '@/components/ui/separator';
 </script>
-
-<style scoped>
-.inner-shadow-custom {
-	box-shadow: rgb(34, 34, 34) 0px 0px 66px -12px inset, rgb(34, 34, 34) 0px 18px 36px -18px inset;
-}
-</style>

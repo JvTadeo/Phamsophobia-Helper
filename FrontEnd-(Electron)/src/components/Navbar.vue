@@ -4,7 +4,7 @@
       v-for="item in sideBar.items"
       variant="secondary"
       :key="item.name"
-      @click="item.action"
+      @click="$router.push(item.route)"
     >
       <component :is="item.icon" />
       {{ item.name }}
@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { Button } from './ui/button';
-import { useSidebarStore } from '@/stores/siderbarStore';
+import { useNavbarStore } from '@/stores/navbarStore';
 
-const sideBar = useSidebarStore();
+const sideBar = useNavbarStore();
 </script>

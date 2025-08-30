@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import ToolBoxView from "@/views/ToolBoxView.vue";
 import StopwatchView from "@/views/StopwatchView.vue";
+import MediaView from "@/views/MediaRewardsView.vue";
 
 const routes = [
     {
@@ -8,6 +10,16 @@ const routes = [
         name: "home",
         component: HomeView,
 
+    },
+    {
+        path: "/toolbox",
+        name: "toolbox",
+        component: ToolBoxView,
+    },
+    {
+        path: "/media",
+        name: "media",
+        component: MediaView,
     },
     {
         path: "/stopwatch",

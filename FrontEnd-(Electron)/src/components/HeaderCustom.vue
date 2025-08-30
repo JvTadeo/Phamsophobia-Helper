@@ -2,7 +2,10 @@
   <div class="w-full flex flex-row h-full py-2 items-center">    
     <!-- Icon -->
     <section class="grow flex flex-row items-center gap-2">
-      <Avatar>
+      <Avatar
+        @click="$router.push('/')"
+        class="cursor-pointer"
+      >
         <AvatarImage src="src/assets/images/I_Phasmophobia.png" />
         <AvatarFallback>P</AvatarFallback>
       </Avatar>
@@ -12,11 +15,11 @@
         <p class="text-stone-400">/{{ $route.name }}</p>
       </section>
     </section>
+    <!-- Players Count -->
     <section class="flex flex-row gap-2 items-center text-amber-50 h-full">
       <p>19.864</p>
       <Signal :size="32"/>
     </section>
-    <!-- Players Count -->
   </div>
 </template>
 

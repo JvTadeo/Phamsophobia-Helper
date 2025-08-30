@@ -104,6 +104,10 @@
   -webkit-app-region: drag
 }
 
+.inner-shadow-custom {
+	box-shadow: rgb(34, 34, 34) 0px 0px 66px -12px inset, rgb(34, 34, 34) 0px 18px 36px -18px inset;
+}
+
 /* Scroll */
 ::-webkit-scrollbar {
   width: 6px;

@@ -7,8 +7,8 @@ import { BrowserWindowConstructorOptions, ipcMain } from 'electron';
 export class MainWindow extends BaseWindow {
   constructor() {
     const options: BrowserWindowConstructorOptions = {
-      width: 500,
-      height: 700,
+      width: 600,
+      height: 800,
       resizable: false,
       maximizable: false,
       frame: false,
