@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { IToolBoxItem } from "@/interface/ToolBoxStore.interface";
+import type { IToolBoxItem } from "@/interface/toolBoxStore.interface";
 import { Clock } from "lucide-vue-next";
 
 export const useToolBoxStore = defineStore("toolbox", {
