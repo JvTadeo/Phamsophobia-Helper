@@ -1,19 +1,26 @@
-import prisma from "@/database/prisma";
+import { MediaTypeRepository } from "@/repository/media-type/media-type.repository";
 
 export class MediaService {
+    private mediaTypeRepository: MediaTypeRepository
+
+    constructor() {
+        this.mediaTypeRepository = new MediaTypeRepository();
+    }
+
     public async getMedias() {
-        return await prisma.mediaType.findMany({
+        return await this.mediaTypeRepository.findMany({
             include: {
                 categories: {
                     select: {
                         description: true,
                         duplicateRewardMoney: true,
-                        duplicateRewardXp: true,
                         uniqueRewardMoney: true,
-                        uniqueRewardXp: true
+                        duplicateRewardXp: true,
+                        uniqueRewardXp: true,                        
                     }
                 }
             }
-        })
+        });
+        
     }
 }
