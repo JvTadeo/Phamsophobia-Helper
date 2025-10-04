@@ -25,5 +25,8 @@ export class SteamAPI {
                 }                
             }
         )
+    };
+    public async getPhasmophobiaPlayerCount(): Promise<any> {
+        return await this.api.get(`ISteamUserStats/GetNumberOfCurrentPlayers/v1/?appid=${this.APP_ID}`);
     }
 }

@@ -13,26 +13,151 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Language {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  code      String
+  name      String
+
+  ghostTranslations GhostTranslation[]
+  evidenceTranslations EvidenceTranslation[]
+  mediaCategoryTranslations MediaCategoryTranslation[]
+  mediaTypeTranslations MediaTypeTranslation[]
+
+  @@map("language")
+  @@unique([code])
+}
+
 // ---- Media Type
 model MediaType {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  name      String
 
   categories MediaCategory[]
+  mediaTypeTranslations MediaTypeTranslation[]
+
+  @@map("media_type")
+}
+
+model MediaTypeTranslation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  name      String
+
+  mediaTypeId String   @map("media_type_id")
+  mediaType   MediaType @relation(fields: [mediaTypeId], references: [id], onDelete: Cascade)
+
+  languageId String    @map("language_id")
+  language   Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@map("media_type_translation")
 }
 
 model MediaCategory {
-  id                    String   @id @default(uuid())
-  createdAt             DateTime @default(now()) @map("created_at")
-  updatedAt             DateTime @updatedAt @map("updated_at")
-  description           String
-  uniqueRewardXp        Int
-  uniqueRewardMoney     Int
-  duplicateRewardXp     Int
-  duplicateRewardMoney  Int
+  id                   String   @id @default(uuid())
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  uniqueRewardXp       Int
+  uniqueRewardMoney    Int
+  duplicateRewardXp    Int
+  duplicateRewardMoney Int
 
-  mediaTypeId           String    @map("media_type_id")
-  mediaType             MediaType @relation(fields: [mediaTypeId], references: [id])
+  mediaTypeId String    @map("media_type_id")
+  mediaType   MediaType @relation(fields: [mediaTypeId], references: [id])
+
+  mediaCategoryTranslations MediaCategoryTranslation[]
+
+  @@map("media_category")
+}
+
+model MediaCategoryTranslation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String
+
+  mediaCategoryId String   @map("media_category_id")
+  mediaCategory   MediaCategory @relation(fields: [mediaCategoryId], references: [id], onDelete: Cascade)
+
+  languageId String    @map("language_id")
+  language   Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@map("media_category_translation")
+}
+
+model Evidence {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  icon      String @default("Dot")
+  
+  ghostEvidences GhostEvidence[]
+  evidenceTranslations EvidenceTranslation[]
+
+  @@map("evidence")
+}
+
+model EvidenceTranslation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")  
+  name      String
+
+  evidenceId String   @map("evidence_id")
+  evidence   Evidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+
+  languageId String    @map("language_id")
+  language   Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@map("evidence_translation")
+}
+
+model GhostEvidence {
+  id String @id @default(uuid())
+
+  ghostId String @map("ghost_id")
+  ghost   Ghost  @relation(fields: [ghostId], references: [id], onDelete: Cascade)
+
+  evidenceId String   @map("evidence_id")
+  evidence   Evidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+
+  @@map("ghost_evidence")
+}
+
+// Tells, Behaviours, Abilities, Hunt Sanity, Evidence, Hunt Speed, Custom
+// High Saniy, Normal Sanity, Low Sanity,
+// Max, Min, Normal Speed,
+model Ghost {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String
+  sanity    Json
+  speed     Json
+
+  ghostTranslations GhostTranslation[]
+  ghostEvidences GhostEvidence[]
+
+  @@map("ghost")
+}
+
+model GhostTranslation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  details   Json
+  custom    Json
+
+  ghostId   String   @map("ghost_id")
+  ghost     Ghost    @relation(fields: [ghostId], references: [id], onDelete: Cascade)
+
+  languageId String    @map("language_id")
+  language   Language  @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@unique([ghostId, languageId])
+  @@map("ghost_translation")
 }
