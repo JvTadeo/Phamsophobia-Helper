@@ -13,7 +13,7 @@ RUN npx prisma generate
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 3050
 
 # 8. Comando para rodar a aplicação
 CMD ["npm", "start"]
