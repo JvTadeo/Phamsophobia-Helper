@@ -1,5 +1,6 @@
 export type ISteamAPI = {
     steamNews: ISteamNews[]
+    steamPlayerCount: number
 }
 
 type ISteamNews = {

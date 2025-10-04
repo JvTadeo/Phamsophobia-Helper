@@ -1,9 +1,10 @@
+import 'express-async-errors';
 import express, { NextFunction, Request, Response, ErrorRequestHandler } from 'express';
 import dotenv from 'dotenv';
 import router from './routes';
 import cors from 'cors';
 import { CustomLogger } from './utils/customLogger';
-import { CustomError } from './utils/customError';
+import { CustomError } from '@/utils/customError';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/', router);
 
 const errorHandler: ErrorRequestHandler = (err: Error, _req: Request, res: Response, _next: NextFunction) => {
+
 	if (err instanceof CustomError) {
 		CustomLogger.error(err.message);
 		res.status(err.statusCode).send({message: err.message, details: err.details,});

@@ -19,11 +19,16 @@ export class SteamService {
                     author: item.author,
                     date: item.date,
                     url: item.url,
+                    publishedAt: item.date
                 }
             })
         })
         .catch((error) => {
             throw new CustomError("Failed to get news", 500, error);
         });
+    }
+    public async getPhasmophobiaPlayerCount(): Promise<ISteamAPI["steamPlayerCount"]> {
+        return await this.steamAPI.getPhasmophobiaPlayerCount()
+        .then(({data}) => data.response.player_count)
     }
 }

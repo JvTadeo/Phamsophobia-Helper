@@ -9,6 +9,7 @@ export class SteamController {
 
         // Bind methods to this instance
         this.getNewsPhasmophobia = this.getNewsPhasmophobia.bind(this);
+        this.getPlayersCount = this.getPlayersCount.bind(this);
     }
 
     public async getNewsPhasmophobia(req: Request, res: Response) {
@@ -16,5 +17,9 @@ export class SteamController {
 
         const news = await this.steamService.getNewsPhasmophobia(limit)
         res.status(200).json(news);
+    }
+    public async getPlayersCount(req: Request, res: Response) {
+        const players = await this.steamService.getPhasmophobiaPlayerCount()
+        res.status(200).json(players);
     }
 }
