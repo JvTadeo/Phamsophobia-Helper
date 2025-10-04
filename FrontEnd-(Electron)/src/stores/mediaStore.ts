@@ -17,6 +17,7 @@ export const useMediaStore = defineStore("media", {
         // ---- Initialization Events
         async initEvent() {
             eventBus.on('language-changed', async ({path}) => {
+                this.types = [];
                 if (path !== '/media') return
 
                 this.loading = true
@@ -32,6 +33,8 @@ export const useMediaStore = defineStore("media", {
             this.loading = false
         },
         async getMedias() {
+            if (this.types.length > 0) return
+            
             this.loading = true
             
             await ServerAPI.getMedias()
