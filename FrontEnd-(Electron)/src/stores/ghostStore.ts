@@ -37,6 +37,9 @@ export const useGhostStore = defineStore("ghost", {
         },
         async initEvent() {
             eventBus.on('language-changed', async ({ path }) => {
+                this.ghosts = [];
+                this.evidences = [];
+
                 if (path !== '/ghost') return
                 this.loading = true
                 window.electronAPI.ghost.loading(true);
@@ -60,12 +63,16 @@ export const useGhostStore = defineStore("ghost", {
             this.loading = false
         },
         async getGhosts() {
+            if (this.ghosts.length > 0) return
+
             await ServerAPI.getGhosts().then(({ data }) => {
                 this.ghosts = data
                 this.filteredGhosts = data
             });
         },
         async getEvidences() {
+            if (this.evidences.length > 0) return;
+
             await ServerAPI.getEvidences()
                 .then(({ data }) => {
                     this.evidences = data
