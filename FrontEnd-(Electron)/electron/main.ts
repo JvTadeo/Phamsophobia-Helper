@@ -1,9 +1,11 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import { MainWindow } from './windows/MainWindow.js';
 import { StopWatchWindow } from './windows/StopwatchWindow.js';
+import { GhostModalWindow } from './windows/GhostModalWindow.js';
 
 let mainWindow: MainWindow | null = null;
 let stopwatchWindow: StopWatchWindow | null = null;
+let ghostModalWindow: GhostModalWindow | null = null;
 
 /**
  * Creates the main application window
@@ -18,9 +20,19 @@ function createWindow(): void {
 function createStopWatchWindow(): void {
   if (!stopwatchWindow || stopwatchWindow.isDestroyed()) {
     stopwatchWindow = new StopWatchWindow();
-  } else {
-    stopwatchWindow.getWindow().show();
+    return;
   }
+  
+  stopwatchWindow.getWindow().show(); 
+}
+
+function createGhostModalWindow(): void {
+  if (!ghostModalWindow || ghostModalWindow.isDestroyed()) {
+    ghostModalWindow = new GhostModalWindow();
+    return;
+  }
+
+  ghostModalWindow.getWindow().show();
 }
 
 // Electron event configuration
@@ -45,6 +57,10 @@ function setupIpcHandlers(): void {
   // Handler for showing stopwatch window
   ipcMain.on('stopwatch:show', () => {
     createStopWatchWindow();
+  });
+
+  ipcMain.on('ghost:show', () => {
+    createGhostModalWindow();
   });
 
   // Handler for Open Default Browser

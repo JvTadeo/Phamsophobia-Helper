@@ -35,8 +35,8 @@ import { useStopwatchStore } from '@/stores/stopwatchStore';
 const stopwatchStore = useStopwatchStore();
 
 onMounted(() => {
-  if (window.electronAPI?.onF1Pressed) {
-      window.electronAPI.onF1Pressed(() => {
+  if (window.electronAPI?.shortcuts.onF1Pressed) {
+      window.electronAPI.shortcuts.onF1Pressed(() => {
           stopwatchStore.handleStopwatchState();
       });    
   }

@@ -18,7 +18,7 @@ export class MainWindow extends BaseWindow {
     super(options);
     
     // Loads the application content
-    this.loadContent('http://localhost:5173', '../dist/index.html');
+    this.loadContent('http://localhost:5173');
   }
 
   /**

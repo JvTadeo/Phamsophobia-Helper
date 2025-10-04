@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { ITimeDividers } from "@/interface/toolBoxStore.interface";
+import type { ITimeDividers } from "@/interface/toolbox-store.interface";
 
 enum StopwatchState {
     STOPPED,
@@ -11,7 +11,7 @@ export const useStopwatchStore = defineStore("stopwatch", {
     state: () => ({
         time: 0 as number, // in ms
         intervalId: null as number | null,
-        stopwatchState: StopwatchState.STOPPED,
+        stopwatchState: StopwatchState.RESET,
         timerDividers: [
             {
                 label: "Demon",

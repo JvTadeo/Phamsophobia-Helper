@@ -1,0 +1,1 @@
+{"root":["./electron/main.ts","./electron/core/basewindow.ts","./electron/windows/ghostmodalwindow.ts","./electron/windows/mainwindow.ts","./electron/windows/stopwatchwindow.ts","./electron/windows/index.ts"],"version":"5.8.3"}

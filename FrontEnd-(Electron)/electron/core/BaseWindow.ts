@@ -16,11 +16,11 @@ export abstract class BaseWindow {
 
   constructor(options: BrowserWindowConstructorOptions = {}) {
     this.isDevelopment = !app.isPackaged;
-    
+
     // Determine correct preload path based on development vs production
     const preloadPath = this.isDevelopment 
       ? path.join(__dirname, '../preload.js')  // Development: dist-electron/preload.js
-      : path.join(__dirname, 'preload.js');    // Production: bundled with app
+      : path.join(app.getAppPath(), 'dist-electron', 'preload.js');    // Production: bundled with app
     
     // Verify if preload file exists
     if (!fs.existsSync(preloadPath)) {
@@ -31,6 +31,8 @@ export abstract class BaseWindow {
     const defaultOptions: BrowserWindowConstructorOptions = {
       show: false,
       autoHideMenuBar: true,
+      fullscreenable: false,
+      icon: path.join(__dirname, 'build/icon.ico'),
       webPreferences: {
         nodeIntegration: false,
         contextIsolation: true,
@@ -49,11 +51,6 @@ export abstract class BaseWindow {
    * Sets up default window behaviors
    */
   private setupDefaultBehavior(): void {
-    // Sets up F12 to open/close DevTools
-    this.window.webContents.on('before-input-event', (event, input) => {
-      if (input.key === 'F12' && input.type === 'keyDown') this.toggleDevTools();
-    });
-
     // Shows the window when ready
     this.window.once('ready-to-show', () => {
       this.window.show();
@@ -63,6 +60,12 @@ export abstract class BaseWindow {
     // Event when the window is closed
     this.window.on('closed', () => {
       this.onWindowClosed();
+    });
+
+    if (!this.isDevelopment) return;
+    // Sets up F12 to open/close DevTools
+    this.window.webContents.on('before-input-event', (event, input) => {
+      if (input.key === 'F12' && input.type === 'keyDown') this.toggleDevTools();
     });
   }
 
@@ -114,18 +117,26 @@ export abstract class BaseWindow {
    * Loads a URL or file in the window
    */
   public loadContent(url?: string, filePath?: string): void {
+    // Load DEVELOPMENT URL
     if (this.isDevelopment && url) {
       this.window.loadURL(url);
-    } else if (filePath) {
-      const fullPath = path.isAbsolute(filePath) 
-        ? filePath 
-        : path.join(__dirname, filePath);
-      this.window.loadFile(fullPath);
-    } else {
-      // Default fallback
-      const defaultPath = path.join(__dirname, '../../dist/index.html');
-      this.window.loadFile(defaultPath);
+      return;
     }
+
+    //
+    if (filePath) {
+      const fullPath = this.isDevelopment
+        ? path.isAbsolute(filePath)
+          ? filePath
+          : path.join(__dirname, filePath)
+        : path.join(app.getAppPath(), 'dist-electron', filePath);
+
+      this.window.loadFile(fullPath);
+      return;
+    }
+
+    const fullPath = path.join(process.resourcesPath, 'dist', 'index.html');
+    this.window.loadFile(fullPath);
   }
 
   /**
