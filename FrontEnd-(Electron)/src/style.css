@@ -125,11 +125,7 @@
 
 /* Tailwind */
 @theme {
-  --font-caveat: Caveat;
-  --font-caveat-bold: Caveat-Bold;
-  --font-caveat-light: Caveat-Light;
-  --font-caveat-italic: Caveat-Italic;
-  --font-test: VT323;
+  --font-vt323: VT323;
 }
 
 @theme inline {

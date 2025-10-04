@@ -1,8 +1,10 @@
 import { createRouter, createWebHashHistory } from "vue-router";
+import StopwatchView from "@/views/StopwatchView.vue";
 import HomeView from "../views/HomeView.vue";
 import ToolBoxView from "@/views/ToolBoxView.vue";
-import StopwatchView from "@/views/StopwatchView.vue";
 import MediaView from "@/views/MediaRewardsView.vue";
+import GhostView from "@/views/GhostView.vue";
+import GhostModalInformation from "@/components/modal/GhostModalInformation.vue";
 
 const routes = [
     {
@@ -22,6 +24,12 @@ const routes = [
         component: MediaView,
     },
     {
+        path: "/ghost",
+        name: "ghost",
+        component: GhostView,
+    },
+    // ----- 
+    {
         path: "/stopwatch",
         name: "stopwatch",
         component: StopwatchView,
@@ -29,6 +37,14 @@ const routes = [
             standalone: true
         }
     },
+    {
+        path: "/ghost-information",
+        name: "ghost-information",
+        component: GhostModalInformation,
+        meta: {
+            standalone: true
+        }
+    }
 ];
 
 const router = createRouter({

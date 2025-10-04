@@ -1,5 +1,6 @@
 import { BrowserWindowConstructorOptions, globalShortcut } from "electron";
 import { BaseWindow } from "../core/BaseWindow.js";
+import path from "path";
 
 export class StopWatchWindow extends BaseWindow {
     constructor() {
@@ -14,7 +15,8 @@ export class StopWatchWindow extends BaseWindow {
         };
         super(options);
 
-        this.loadContent('http://localhost:5173/#/stopwatch', '../../dist/index.html');
+        const url = this.isDevelopment ? 'http://localhost:5173/#/stopwatch': `file://${path.join(process.resourcesPath, 'dist', 'index.html')}#/stopwatch`;
+        this.window.loadURL(url);
         
         // Registra o atalho global F1
         this.registerGlobalShortcuts();
